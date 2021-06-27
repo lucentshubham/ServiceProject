@@ -1,0 +1,45 @@
+initial database scheme:
+for All providers:
+	sr no
+	name
+	profession/category
+	city
+	phone no
+	speciality
+	email
+	type
+	degrees/qualifications
+	images of the workplace and locality
+	address(workplace)
+	opening time / closing time
+	experience(optional)
+	ratings(by users)
+	reviews(by users)
+	home service available or not
+	fee
+
+...............................same for other providers......................................
+
+for customers
+	sr no
+	email
+	name
+	city
+	phone no
+
+ignore this for now
+Other Factors:
+	* marketing:
+		social media marking (affordable)
+
+important
+Our facilities:
+	* availibility of basic facilities near user like:
+		medical (doctors and medical store)
+		stationary and gift shops
+		dairy and ration shops
+		electritian and related shops
+		plumber and related shops
+	* integrated blog(health)
+	* provide mini E-shoping platform for all providers(maybe later or now)
+
