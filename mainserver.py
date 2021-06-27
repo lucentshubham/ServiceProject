@@ -1,14 +1,9 @@
 from flask import Flask,render_template
 from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
-
-#db = SQLAlchemy(app)
-
-
-
-
-
-
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:kapil@localhost/service_provider_website"
+db = SQLAlchemy(app)
+from Database.databases import *
 @app.route("/")
 def home():
     return render_template("index.html")
