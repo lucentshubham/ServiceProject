@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block mainbody %}
+  <main id="main">
+  <link rel="stylesheet" href="{{url_for('static',filename = 'assets/login/css/style.css')}}">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li>Inner Page</li>
+        </ol>
+        <h2>Inner Page</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <section class="inner-page pt-4">
+      <div class="container">
+        <div class="container login-container">
+            <div class="row">
+                <div class="col-md-6 login-form-1">
+                    <h3>SignIn</h3>
+                    <form action="/login" method="POST">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="email" placeholder="Your Email *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" placeholder="Your Password *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btnSubmit" value="Login" />
+                        </div>
+                        <div class="form-group">
+                            <a href="#" class="ForgetPwd">Forget Password?</a>
+                        </div>
+                    </form>
+                </div>
+
+
+
+                <div class="col-md-6 login-form-2">
+                    <h3>SignUp</h3>
+                    <form action="/signup" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control" placeholder="Your Name" value="" />
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="category" name="category" value="" >
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="profession" name="profession">
+                                <option value="">Select Profession</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" class="form-control" name="phone" placeholder="Phone number" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="email" placeholder="Your Email *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="pass1" placeholder="Your Password *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="pass2" placeholder="Confirm Password *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btnSubmit" value="Sign Up" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <!--js file here-->
+
+  <script src="{{url_for('static',filename = 'assets/js/jquery-3.6.0.min.js')}}"></script>
+  <script>
+      $(document).ready(()=>{
+          let jsonurl = `{{url_for('static',filename = 'assets/data/categories_prof.json')}}`
+          fetch(jsonurl)
+            .then(response => response.json())
+            .then((jsonResponse) => {
+                let categoryselector = document.getElementById("category")
+                for (let x in jsonResponse["categories"]){
+                    // create options for state selector
+                    let option = document.createElement("option")
+                    option.setAttribute("value",jsonResponse["categories"][x])
+                    option.innerHTML = jsonResponse["categories"][x]
+                    categoryselector.appendChild(option)
+                }
+                let proffesionselector = document.getElementById("profession")
+                for (let x in jsonResponse["professions"]){
+                    // create options for state selector
+                    let option = document.createElement("option")
+                    option.setAttribute("value",jsonResponse["professions"][x])
+                    option.innerHTML = jsonResponse["professions"][x]
+                    proffesionselector.appendChild(option)
+                }
+            }) 
+      })
+      
+  </script>
+
+
+
+
+
+
+
+
+ {% endblock mainbody %}
