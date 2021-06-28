@@ -8,7 +8,8 @@
   <title>What you want</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
-
+ {% if user %}
+ {% endif %}
   <!-- Favicons -->
   <link href="{{url_for('static',filename = 'assets/img/favicon.png')}}" rel="icon">
   <link href="{{url_for('static',filename = 'assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
@@ -60,26 +61,22 @@
         <ul>
           <li class="active"><a href="#home">Home</a></li>
           <li><a href="#about">About Us</a></li>
+          {% if not user %}
+          <li><a href="/login">Login/Sign Up</a></li>
+          {% endif %}
           <li><a href="#services">Services</a></li>
           <li><a href="#team">Team</a></li>
-          <!-- <li class="drop-down"><a href="">Drop Down</a>
-            <ul>
-              <li><a href="#">Drop Down 1</a></li>
-              <li class="drop-down"><a href="#">Drop Down 2</a>
-                <ul>
-                  <li><a href="#">Deep Drop Down 1</a></li>
-                  <li><a href="#">Deep Drop Down 2</a></li>
-                  <li><a href="#">Deep Drop Down 3</a></li>
-                  <li><a href="#">Deep Drop Down 4</a></li>
-                  <li><a href="#">Deep Drop Down 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li>
-              <li><a href="#">Drop Down 5</a></li>
-            </ul>
-          </li> -->
           <li><a href="#footer">Contact Us</a></li>
+          {% if user %}
+          <li class="drop-down"><a href="/">{{user}}</a>
+            <ul>
+              <li><a href="#">Profile</a></li>
+              <li><a href="#">Dashboard</a></li>
+              <li><a href="#">Setting</a></li>
+              <li><a href="/logout">Logout</a></li>
+            </ul>
+          </li>
+          {% endif %}
         </ul>
       </nav><!-- .main-nav-->
 
