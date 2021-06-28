@@ -2,12 +2,12 @@ initial database scheme:
 for All providers:
 	sr no
 	name
-	profession/category
+	profession
 	city
 	phone no
 	speciality
 	email
-	type
+	category
 	degrees/qualifications
 	images of the workplace and locality
 	address(workplace)
