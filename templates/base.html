@@ -68,9 +68,9 @@
           <li><a href="/login">Login/Sign Up</a></li>
           {% endif %}
           {% if user %}
-          <li class="drop-down"><a href="/">{{user}}</a>
+          <li class="drop-down"><a href="/">{{user.name}}</a>
             <ul>
-              <li><a href="/profile">Profile</a></li>
+              <li><a href="/profile/{{user.email}}">Profile</a></li>
               <li><a href="#">Dashboard</a></li>
               <li><a href="#">Setting</a></li>
               <li><a href="/logout">Logout</a></li>
