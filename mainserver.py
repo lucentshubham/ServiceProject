@@ -5,9 +5,9 @@ from werkzeug.utils import redirect
 from Database.databases import ServiceProvider,Admin,User,Ratings,Reviews,maindb as db
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dfssdafasbsjcsdflhnvvbhflssdfhjsffrdees"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:kapil@localhost/service_provider_website"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:kapil@localhost/service_provider_website"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost:3306/service_provider_website"
 db.__init__(app)
-
 @app.route("/")
 def home():
     user = None
@@ -26,7 +26,7 @@ def login():
         user = ServiceProvider.query.filter_by(email = email).first()
         if user:
             if user.password == password:
-                session['user'] = user.email
+                session['user'] = user.name
                 return redirect("/")
         return render_template("login_signup.html")
 
@@ -64,4 +64,8 @@ def logout():
         pass
     return redirect("/")
 
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
 app.run(debug=True)
