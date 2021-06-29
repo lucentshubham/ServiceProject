@@ -68,4 +68,9 @@ def logout():
 @app.route('/profile')
 def profile():
     return render_template('profile.html')
+
+@app.route('/doctor')
+def doctor():
+    return render_template('dr.html')
 app.run(debug=True)
+

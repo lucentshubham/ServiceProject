@@ -39,7 +39,7 @@ class User(maindb.Model):
     email = maindb.Column(maindb.String(50),nullable = False)
     city = maindb.Column(maindb.String(30),nullable = False)
     state=maindb.Column(maindb.String(30),nullable = False)
-    phone = maindb.Column(maindb.String(13),nullable = True) 
+    phone = maindb.Column(maindb.String(13),nullable = True)
 
 class Admin(maindb.Model):
     __tablename__ = "admin"
