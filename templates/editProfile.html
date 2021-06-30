@@ -43,22 +43,11 @@
           <nav aria-label="breadcrumb" class="main-breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+              <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
             </ol>
           </nav>
-          {% with messages = get_flashed_messages() %}
-            {% if messages %}
-              {% for message in messages %}
-                <div class="alert alert-primary" role="alert">
-                  {{message}}
-                </div>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-          
-
           <!-- /Breadcrumb -->
-
+    
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
               <div class="card">
@@ -97,24 +86,17 @@
                 </ul>
               </div>
             </div>
+            
             <div class="col-md-8">
               <div class="card mb-3">
+                <form action="/profile/edit" method="POST">
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm-3">
                       <h6 class="mb-0">Full Name</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                      {{user.name}}
-                    </div>
-                  </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Email</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                      {{user.email}}
+                      <input name="name" type="text" value="{{user.name}}" required />
                     </div>
                   </div>
                   <hr>
@@ -123,7 +105,7 @@
                       <h6 class="mb-0">Phone</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                      {{user.phone}}
+                      <input name="phone" type="tel" value="{{user.phone}}" required/>
                     </div>
                   </div>
                   <hr>
@@ -132,7 +114,7 @@
                       <h6 class="mb-0">Address</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                      {{user.address}}
+                      <textarea name="address" cols="30" rows="5">{{user.address}}</textarea>
                     </div>
                   </div>
                   <hr>
@@ -141,7 +123,9 @@
                       <h6 class="mb-0">Profession</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                      {{user.profession}}
+                      <select name="profession" id="profession">
+                        <option value="{{user.profession}}">{{user.profession}}</option>
+                      </select>
                     </div>
                   </div>
                   <hr>
@@ -150,34 +134,49 @@
                       <h6 class="mb-0">category</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                      {{user.category}}
+                      <select name="category" id="category">
+                        <option value="{{user.category}}">{{user.category}}</option>
+                      </select>
                     </div>
                   </div>
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">city</h6>
+                      <h6 class="mb-0">State</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                      {{user.city}}
+                      <select name="state" id="state">
+                        <option value="{{user.state}}">{{user.state}}</option>
+                      </select>
                     </div>
                   </div>
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">speciality</h6>
+                      <h6 class="mb-0">City</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                      {{user.speciality}}
+                      <select name="city" id="city" disabled>
+                        <option value="{{user.city}}">{{user.city}}</option>
+                      </select>
                     </div>
                   </div>
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">experience</h6>
+                      <h6 class="mb-0">Speciality</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                      {{user.experience}}
+                      <textarea name="speciality" cols="30" rows="5">{{user.speciality}}</textarea>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Experience</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <input name="experience" type="number" value="{{user.experience}}"/>
                     </div>
                   </div>
                   <hr>
@@ -186,20 +185,91 @@
                       <h6 class="mb-0">Qualification</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                      {{user.qualification}}
+                      <textarea name="qualification" cols="30" rows="5">{{user.qualification}}</textarea>
                     </div>
                   </div>
                   <hr>
                   <div class="row">
                     <div class="col-sm-12">
-                      <a class="btn btn-info " href="/profile/edit">Edit</a>
+                      <Button class="btn btn-info " type="submit">Update</a>
                     </div>
                   </div>
                 </div>
               </div>
+            </form>
             </div>
           </div>
         </div>
     </div>
+
+  <!--custom js start here -->
+  <script src="{{url_for('static',filename = 'assets/js/jquery-3.6.0.min.js')}}"></script>
+  <script>
+      $(document).ready(()=>{
+          let jsonurl = `{{url_for('static',filename = 'assets/data/categories_prof.json')}}`
+          fetch(jsonurl)
+            .then(response => response.json())
+            .then((jsonResponse) => {
+                let categoryselector = document.getElementById("category")
+                for (let x in jsonResponse["categories"]){
+                    // create options for category selector
+                    let option = document.createElement("option")
+                    option.setAttribute("value",jsonResponse["categories"][x])
+                    option.innerHTML = jsonResponse["categories"][x]
+                    categoryselector.appendChild(option)
+                }
+                let proffesionselector = document.getElementById("profession")
+                for (let x in jsonResponse["professions"]){
+                    // create options for profession selector
+                    let option = document.createElement("option")
+                    option.setAttribute("value",jsonResponse["professions"][x])
+                    option.innerHTML = jsonResponse["professions"][x]
+                    proffesionselector.appendChild(option)
+                }
+            })
+            
+          jsonurl = `{{url_for('static',filename = 'assets/data/states_city.json')}}`
+          let jsondata = null
+          fetch(jsonurl)
+            .then(response => response.json())
+            .then((jsonResponse) => {
+              jsondata = jsonResponse
+                let stateselector = document.getElementById("state")
+                for (let x in jsonResponse){
+                    // create options for state selector
+                    let option = document.createElement("option")
+                    option.setAttribute("value",x)
+                    option.innerHTML = x
+                    stateselector.appendChild(option)
+                }
+            })
+            let cityselector = document.getElementById("city")
+            if(cityselector.innerText != "None"){
+              cityselector.removeAttribute("disabled")
+            }
+            $("#state").change(()=>{
+              let state = $("#state")
+              if (state == "None"){
+                cityselector.setAttribute('disabled',"")
+                return
+              }
+              cityselector.removeAttribute("disabled")
+              
+              let cities = jsondata[state.val()]
+              cityselector.innerHTML = ""
+              for (let x in cities){
+                // create options for city selector
+                let option = document.createElement("option")
+                option.setAttribute("value",cities[x])
+                option.innerHTML = cities[x]
+                cityselector.appendChild(option)
+              }
+            })
+      })
+      
+  </script>
+
   </body>
 </html>
+
+  
