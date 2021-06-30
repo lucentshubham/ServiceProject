@@ -9,9 +9,10 @@ class ServiceProvider(maindb.Model):
     profession = maindb.Column(maindb.String(50),nullable = False)
     category = maindb.Column(maindb.String(50),nullable = False)
     city = maindb.Column(maindb.String(30),nullable = True)
+    state = maindb.Column(maindb.String(30),nullable = True)
     phone = maindb.Column(maindb.String(13),nullable = False)
     speciality = maindb.Column(maindb.String(50),nullable = True)
-    qualification = maindb.Column(maindb.Text,nullable=True)
+    qualification = maindb.Column(maindb.PickleType,nullable=True)
     images = maindb.Column(maindb.PickleType,nullable = True)
     address = maindb.Column(maindb.String(100),nullable = True)
     open_close_time = maindb.Column(maindb.DateTime,nullable = True)
@@ -39,7 +40,7 @@ class User(maindb.Model):
     email = maindb.Column(maindb.String(50),nullable = False)
     city = maindb.Column(maindb.String(30),nullable = False)
     state=maindb.Column(maindb.String(30),nullable = False)
-    phone = maindb.Column(maindb.String(13),nullable = True)
+    phone = maindb.Column(maindb.String(13),nullable = True) 
 
 class Admin(maindb.Model):
     __tablename__ = "admin"
