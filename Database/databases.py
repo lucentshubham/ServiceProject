@@ -49,3 +49,11 @@ class Admin(maindb.Model):
     username=maindb.Column(maindb.String(50),nullable=False)
     email = maindb.Column(maindb.String(50),nullable = False)
     password = maindb.Column(maindb.String(10),nullable = False)
+
+class Appointment(maindb.Model):
+    __tabelname__="appointment"
+    sno = maindb.Column(maindb.Integer,primary_key=True)
+    name = maindb.Column(maindb.String(50),nullable=False)
+    phone = maindb.Column(maindb.String(13),nullable=False)
+    drid = maindb.Column(maindb.Integer,nullable=False)
+

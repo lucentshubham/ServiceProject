@@ -3,11 +3,11 @@ from flask import Flask,render_template,request,session,abort
 from flask.helpers import flash
 from sqlalchemy.orm import selectin_polymorphic
 from werkzeug.utils import redirect
-from Database.databases import ServiceProvider,Admin,User,Ratings,Reviews,maindb as db 
+from Database.databases import ServiceProvider,Appointment,Admin,User,Ratings,Reviews,maindb as db 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dfssdafasbsjcsdflhnvvbhflssdfhjsffrdees"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:kapil@localhost/service_provider_website"
-#app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost:3306/service_provider_website"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:kapil@localhost/service_provider_website"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost:3306/service_provider_website"
 db.__init__(app)
 @app.route("/")
 def home():
@@ -92,7 +92,18 @@ def ProfileEdit():
         user.qualification = request.form.get("qualification")
         db.session.commit()
         flash("Profile Update")
-        return redirect(f"/profile/{user.email}")       
+        return redirect(f"/profile/{user.email}") 
+
+
+@app.route("/appointment",methods=['POST'])
+def make():
+    Appointment.name = request.form.get("name")
+    Appointment.name = request.form.get("phone")
+    Appointment.name = request.form.get("drid") 
+
+    db.session.commit()
+    flash("Appointment fix")
+    return render_template('dr.html')   
 
 @app.route("/dr")
 def dr():
