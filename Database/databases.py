@@ -53,7 +53,8 @@ class Admin(maindb.Model):
 class Appointment(maindb.Model):
     __tabelname__="appointment"
     sno = maindb.Column(maindb.Integer,primary_key=True)
+    appoitmnt_id = maindb.Column(maindb.String(5),nullable = False)
     name = maindb.Column(maindb.String(50),nullable=False)
     phone = maindb.Column(maindb.String(13),nullable=False)
-    drid = maindb.Column(maindb.Integer,nullable=False)
+    dr_id = maindb.Column(maindb.Integer,nullable=False)
 
