@@ -1,8 +1,8 @@
-import re
 from flask import Flask,render_template,request,session,abort
 from flask.helpers import flash
-from sqlalchemy.orm import selectin_polymorphic
 from werkzeug.utils import redirect
+import random
+import json
 from Database.databases import ServiceProvider,Appointment,Admin,User,Ratings,Reviews,maindb as db 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dfssdafasbsjcsdflhnvvbhflssdfhjsffrdees"
@@ -14,7 +14,6 @@ def home():
     user = None
     if "user" in session:
         user = session['user']
-        print(user)
     return render_template("index.html",user = user)
 
 @app.route("/login",methods = ["GET","POST"])
@@ -68,8 +67,11 @@ def logout():
 @app.route('/profile/<string:email>')
 def profile(email):
     user  = ServiceProvider.query.filter_by(email = email).first()
+    curr_user = None
+    if 'user' in session:
+        curr_user = session['user']
     if user:
-        return render_template('profile.html',user = user)
+        return render_template('profile.html',user = user,curr_user = curr_user)
     return abort(404)
 
 @app.route("/profile/edit",methods = ["GET",'POST'])
@@ -95,18 +97,28 @@ def ProfileEdit():
         return redirect(f"/profile/{user.email}") 
 
 
-@app.route("/appointment",methods=['POST'])
-def make():
-    Appointment.name = request.form.get("name")
-    Appointment.name = request.form.get("phone")
-    Appointment.name = request.form.get("drid") 
+@app.route("/dashboard/<string:id>",methods=["GET",'POST'])
+def dashboard(id):
+    doctor = ServiceProvider.query.filter_by(sno = id).first()
+    if doctor and doctor.profession.casefold() == "doctor":
+        return render_template('dashboard.html',doctor = doctor)
+    return abort(404)
 
-    db.session.commit()
-    flash("Appointment fix")
-    return render_template('dr.html')   
+@app.route("/appointment",methods = ["POST"])
+def appointment():
+    samples = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
+               'w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R',
+               'S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'
+              ]
+    appointment_id = ''.join(random.sample(samples,5))
+    pass
 
-@app.route("/dr")
-def dr():
-    return render_template("dr.html")
+@app.route("/list")
+def servicelist():
+    jsonfile = open("./static/assets/data/categories_prof.json")
+    jsondata = json.load(jsonfile)
+    categories = jsondata["professions"]
+    serviceproviders = ServiceProvider.query.all()
+    return render_template("serviceproviderlist.html",providers = serviceproviders,categories = categories)
 
 app.run(debug=True)
