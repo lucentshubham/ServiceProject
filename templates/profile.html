@@ -127,6 +127,7 @@
                     </div>
                   </div>
                   <hr>
+                  {% if user.address%}
                   <div class="row">
                     <div class="col-sm-3">
                       <h6 class="mb-0">Address</h6>
@@ -136,6 +137,8 @@
                     </div>
                   </div>
                   <hr>
+                  {%endif%}
+                  {%if user.profession%}
                   <div class="row">
                     <div class="col-sm-3">
                       <h6 class="mb-0">Profession</h6>
@@ -145,6 +148,8 @@
                     </div>
                   </div>
                   <hr>
+                  {%endif%}
+                  {%if user.category%}
                   <div class="row">
                     <div class="col-sm-3">
                       <h6 class="mb-0">category</h6>
@@ -154,6 +159,7 @@
                     </div>
                   </div>
                   <hr>
+                  {%endif%}
                   <div class="row">
                     <div class="col-sm-3">
                       <h6 class="mb-0">city</h6>
@@ -165,6 +171,16 @@
                   <hr>
                   <div class="row">
                     <div class="col-sm-3">
+                      <h6 class="mb-0">State</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      {{user.state}}
+                    </div>
+                  </div>
+                  <hr>
+                  {%if user.speciality%}
+                  <div class="row">
+                    <div class="col-sm-3">
                       <h6 class="mb-0">speciality</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
@@ -172,6 +188,8 @@
                     </div>
                   </div>
                   <hr>
+                  {%endif%}
+                  {%if user.experience%}
                   <div class="row">
                     <div class="col-sm-3">
                       <h6 class="mb-0">experience</h6>
@@ -181,6 +199,8 @@
                     </div>
                   </div>
                   <hr>
+                  {%endif%}
+                  {%if user.qualification%}
                   <div class="row">
                     <div class="col-sm-3">
                       <h6 class="mb-0">Qualification</h6>
@@ -190,6 +210,7 @@
                     </div>
                   </div>
                   <hr>
+                  {%endif%}
                   {% if curr_user %}
                   <div class="row">
                     <div class="col-sm-12">

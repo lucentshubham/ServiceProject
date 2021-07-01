@@ -38,9 +38,10 @@ class User(maindb.Model):
     sno = maindb.Column(maindb.Integer,primary_key = True)
     name = maindb.Column(maindb.String(50),nullable=False)
     email = maindb.Column(maindb.String(50),nullable = False)
-    city = maindb.Column(maindb.String(30),nullable = False)
-    state=maindb.Column(maindb.String(30),nullable = False)
+    city = maindb.Column(maindb.String(30),nullable = True)
+    state=maindb.Column(maindb.String(30),nullable = True)
     phone = maindb.Column(maindb.String(13),nullable = True) 
+    password=maindb.Column(maindb.String(16),nullable = False)
 
 class Admin(maindb.Model):
     __tablename__ = "admin"

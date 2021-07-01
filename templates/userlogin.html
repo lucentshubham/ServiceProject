@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% block mainbody %}
+  <main id="main">
+  <link rel="stylesheet" href="{{url_for('static',filename = 'assets/login/css/style.css')}}">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li>Inner Page</li>
+        </ol>
+        <h2>Login here</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <section class="inner-page pt-4">
+      <div class="container">
+        <div class="container login-container">
+            <div class="row">
+                <div class="col-md-6 login-form-1">
+                    <h3>SignIn</h3>
+                    <form action="/user/login" method="POST">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="email" placeholder="Your Email *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" placeholder="Your Password *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btnSubmit" value="Login" />
+                        </div>
+                        <div class="form-group">
+                            <a href="#" class="ForgetPwd">Forget Password?</a>
+                        </div>
+                    </form>
+                </div>
+
+
+
+                <div class="col-md-6 login-form-2">
+                    <h3>SignUp</h3>
+                    <form action="/user/signup" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control" placeholder="Your Name" value="" />
+                        </div>
+                    
+                        <div class="form-group">
+                            <input type="tel" class="form-control" name="phone" placeholder="Phone number" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="email" placeholder="Your Email *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="pass1" placeholder="Your Password *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="pass2" placeholder="Confirm Password *" value="" />
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="state" name="state" value="" >
+                                <option value="">Select state</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select class="form-control" id="city" name="city" value="" >
+                                <option value="">Select city</option>
+                            </select>
+                        </div>
+                        
+                    
+
+                        <div class="form-group">
+                            <input type="submit" class="btnSubmit" value="Sign Up" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <!-- End #main -->
+
+
+  <!--js file here-->
+
+  <script src="{{url_for('static',filename = 'assets/js/jquery-3.6.0.min.js')}}"></script> <!--ye jQuery ki file he -->
+  <script>
+      //yaha me apne js likhunga
+      // html me kisi bhi element ko select karne ke liye ye sign lagta he the us elemet ki id likhte he  ok
+      // is js ko automatic chalan chata hu jab ye html file load ho to me poore html file ko select karunga is sign se ok
+      //pori html file document variable se select hoti he iske ander ready functuon hota he jo automatic run hota he ja bfile load ho jae ok? omk
+      //is ready funtuon ke ander ek apna funtion dalte he jo hume run karana he usme hi sara logic likhenge ok? ok
+      //ye shotcut tareeka he funtion banane ka js me ok
+      $(document).ready(()=>{
+        //yaha logic aega
+        //humara logic he ki pehle user state select karega fir use state ki jo bhi city hongi vo dropdown me dkhengi ok? ok
+        // humara sara data ek json file me he 
+        // yaha hum fetch api use kana hogi app is api se kisi bhi file ya kisi bhi website se data nikaal sakte he ok? ok
+        //fetch ek async funtion he mtlb ye pehle check karega ki file exist karte he ya nahi or result degab ok
+        // uska result bhi ek async funtion hoga usme  humara sra data hoga jo chahiye to pehle result lete he pk? ok
+        //async funtion ka result then naam ke functuom me aata he ok? k
+        //humara result response variable me he console .log use print karega  dekhte he kya aata he ok? ok
+        //ye response ke ander bhi ek then function he uske ander humara data he ok
+        //ab humra data print hona chaiye
+        // data humara string me he ise jsom me coverkrna padega ok? k
+        fetch("/static/assets/data/states_city.json").then(response=>{
+            response.text().then(data=>{
+                //is data per loop laga do 
+                let jsondata = JSON.parse(data) //convert to json
+                var statedropdown = document.getElementById("state")// yaha per us dropdown ki id dalenge nad use variable me save kar lenge ok?ok
+                
+                for(let x in jsondata){
+                    var stateoption = document.createElement("option")
+                    stateoption.setAttribute("value",x)
+                    stateoption.innerHTML = x
+                    // in teen line ka matlab he 
+                    // <option value="name of state" >name of state</option>
+                    //ok? ok ab is option ko hum drodwn me add karenge 
+                    statedropdown.appendChild(stateoption)
+                }
+                //yaha city wale dropdown ko select karnege
+                let citydropdown = document.getElementById("city") //yaha simple js use karne 
+                var statedropdown = $("#state")
+                statedropdown.change(()=>{
+                    let cities = jsondata[statedropdown.val()]
+                    for(let x in cities){
+                    var cityoption = document.createElement("option")
+                    cityoption.setAttribute("value",cities[x])
+                    cityoption.innerHTML = cities[x]
+                    citydropdown.appendChild(cityoption)
+                    }
+                })
+            })
+        })
+      })
+  </script>
+
+
+
+
+
+
+
+ {% endblock mainbody %}

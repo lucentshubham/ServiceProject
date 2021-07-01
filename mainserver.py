@@ -9,6 +9,8 @@ app.config["SECRET_KEY"] = "dfssdafasbsjcsdflhnvvbhflssdfhjsffrdees"
 #app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:kapil@localhost/service_provider_website"
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost:3306/service_provider_website"
 db.__init__(app)
+
+
 @app.route("/")
 def home():
     user = None
@@ -16,8 +18,22 @@ def home():
         user = session['user']
     return render_template("index.html",user = user)
 
-@app.route("/login",methods = ["GET","POST"])
+@app.route("/user/login",methods = ["GET","POST"])
 def login():
+    if request.method == "GET":
+        return render_template("userlogin.html")
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        user = User.query.filter_by(email = email).first()
+        if user:
+            if user.password == password:
+                session['user'] = {"name":user.name,"email":user.email}
+                return redirect("/")
+        return render_template("userlogin.html")
+
+@app.route("/dr/login",methods = ["GET","POST"])
+def drlogin():
     if request.method == "GET":
         return render_template("login_signup.html")
     if request.method == "POST":
@@ -30,31 +46,55 @@ def login():
                 return redirect("/")
         return render_template("login_signup.html")
 
-@app.route("/signup",methods = ["GET","POST"])
+@app.route("/user/signup",methods = ["GET","POST"])
 def signup():
     if request.method == "GET":
-        return render_template("login_signup.html")
+        return render_template("userlogin.html")
     if request.method == "POST":
         name = request.form.get("name")
-        category = request.form.get("category")
-        profession = request.form.get("profession")
         phone = request.form.get("phone")
         email = request.form.get("email")
         pass1 = request.form.get("pass1")
         pass2 = request.form.get("pass2")
         if pass1 == pass2:
-            servprov = ServiceProvider(
+            user = User(
                 name = name,
                 email = email,
-                profession =profession,
-                category = category,
                 phone = phone,
                 password = pass1
             )
-            db.session.add(servprov)
+            db.session.add(user)
             db.session.commit()
             print("add successfully")
-        return render_template("login_signup.html")
+        return render_template("userlogin.html")
+
+@app.route('/dr/signup', methods=['GET','POST'])
+def drsignup():
+    if request.method=="GET":
+        return render_template('login_signup.html')
+    if request.method =="POST":
+        name=request.form.get("name")
+        category=request.form.get("category")
+        profession=request.form.get("profession")
+        phone=request.form.get("phone")
+        email=request.form.get("email")
+        pass1=request.form.get("pass1")
+        pass2=request.form.get("pass2")
+        if pass1==pass2:
+            servpr=ServiceProvider(
+                name=name,
+                category=category,
+                profession=profession,
+                phone=phone,
+                email=email,
+                password=pass1
+            )
+            db.session.add(servpr)
+            db.session.commit()
+            flash('signup successfully')
+        return render_template('login_signup.html')
+
+
 
 @app.route("/logout")
 def logout():
@@ -67,6 +107,8 @@ def logout():
 @app.route('/profile/<string:email>')
 def profile(email):
     user  = ServiceProvider.query.filter_by(email = email).first()
+    if not user:
+        user = User.query.filter_by(email = email).first()
     curr_user = None
     if 'user' in session:
         curr_user = session['user']

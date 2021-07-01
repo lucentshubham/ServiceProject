@@ -65,7 +65,12 @@
           <li><a href="#team">Team</a></li>
           <li><a href="#footer">Contact Us</a></li>
           {% if not user %}
-          <li><a href="/login">Login/Sign Up</a></li>
+          <li class="drop-down"><a href="">SignIn/SignUp</a>
+            <ul>
+              <li><a href="/user/signup">User</a></li>
+              <li><a href="/dr/signup">Doctor</a></li>
+            </ul>
+          </li>
           {% endif %}
           {% if user %}
           <li class="drop-down"><a href="/">{{user.name}}</a>
