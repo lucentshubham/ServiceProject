@@ -4,14 +4,14 @@ from werkzeug.utils import redirect
 import random
 import json
 from Database.databases import ServiceProvider,User,maindb as db 
-from .Doctor.main import db as doctor_db,app as doctor_app
+from Doctor.main import db as doctor_db,app as doctor_app
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dfssdafasbsjcsdflhnvvbhflssdfhjsffrdees"
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:kapil@localhost/service_provider_website"
 #app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost:3306/service_provider_website"
 db.__init__(app)
-doctor_db.__init__(app)
 app.register_blueprint(doctor_app,url_prefix="/doctor")
+doctor_db.__init__(app)
 @app.route("/")
 def home():
     user = None
@@ -42,6 +42,8 @@ def signup():
         name = request.form.get("name")
         phone = request.form.get("phone")
         email = request.form.get("email")
+        state=request.form.get("state")
+        city=request.form.get("city")
         pass1 = request.form.get("pass1")
         pass2 = request.form.get("pass2")
         if pass1 == pass2:
@@ -49,6 +51,8 @@ def signup():
                 name = name,
                 email = email,
                 phone = phone,
+                state = state,
+                city = city,
                 password = pass1
             )
             db.session.add(user)
@@ -75,6 +79,35 @@ def profile(email):
     if user:
         return render_template('profile.html',user = user,curr_user = curr_user)
     return abort(404)
- 
+
+
+
+@app.route("/profile/edit",methods = ["GET",'POST'])
+def ProfileEdit():
+    if 'user' not in session:
+        return abort(404)
+    user = ServiceProvider.query.filter_by(email = session['user']['email']).first()
+    if user.profession != "Doctor":
+        abort(404)
+    if request.method == "GET":
+        return render_template("editProfile.html",user = user)
+    if request.method == "POST":
+        user.name = request.form.get("name")
+        user.phone = request.form.get("phone")
+        user.address = request.form.get("address")
+        user.profession = request.form.get("profession")
+        user.category = request.form.get("category")
+        user.state = request.form.get("state")
+        user.city = request.form.get("city")
+        user.speciality = request.form.get("speciality")
+        if request.form.get("experience") !="":
+            user.experience = request.form.get("experience")
+        else:
+            user.experience = 0
+        user.qualification = request.form.get("qualification")
+        db.session.commit()
+        print(user.city)
+        flash("Profile Update")
+        return redirect(f"/profile/{user.email}")
 
 app.run(debug=True)
