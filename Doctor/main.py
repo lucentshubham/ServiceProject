@@ -1,7 +1,8 @@
 from flask import Blueprint,request,render_template,redirect,abort,flash,session
-from Database.databases import ServiceProvider
+from Database.databases import Appointment, ServiceProvider
 from flask_sqlalchemy import SQLAlchemy
 import random,json
+from datetime import datetime
 app = Blueprint(__file__,"doctor_app",static_folder="static",template_folder="Doctor/templates")
 db = SQLAlchemy()
 
@@ -63,7 +64,16 @@ def appointment():
                'S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'
               ]
     appointment_id = ''.join(random.sample(samples,5))
-    pass
+    appoint = Appointment(
+        name = request.form.get("name"),
+        phone = request.form.get("phone"),
+        time = request.form.get("date"),
+        dr_id = request.form.get("dr_id"),
+        appoitmnt_id = appointment_id
+    )
+    db.session.add(appoint)
+    db.session.commit()
+    return f"Appointment success. Your appointent id is {appointment_id}"
 
 @app.route("/list")
 def servicelist():
