@@ -1,8 +1,9 @@
 from flask import Blueprint,request,render_template,redirect,abort,flash,session
-from ..Database.databases import ServiceProvider
+from Database.databases import Appointment, ServiceProvider
 from flask_sqlalchemy import SQLAlchemy
 import random,json
-app = Blueprint("Doctor",static_folder="static",template_folder="templates")
+from datetime import datetime
+app = Blueprint(__file__,"doctor_app",static_folder="static",template_folder="Doctor/templates")
 db = SQLAlchemy()
 
 @app.route('/signup', methods=['GET','POST'])
@@ -31,6 +32,24 @@ def drsignup():
             flash('signup successfully')
         return render_template('login_signup.html')
 
+
+@app.route("/login",methods = ["GET","POST"])
+def login():
+    if request.method == "GET":
+        return render_template("login_signup.html")
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        user = ServiceProvider.query.filter_by(email = email).first()
+        if user:
+            if user.password == password:
+                session['user'] = {"name":user.name,"email":user.email}
+                return redirect("/")
+        return render_template("login_signup.html")
+
+
+
+
 @app.route("/dashboard/<string:id>",methods=["GET",'POST'])
 def dashboard(id):
     doctor = ServiceProvider.query.filter_by(sno = id).first()
@@ -45,36 +64,19 @@ def appointment():
                'S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'
               ]
     appointment_id = ''.join(random.sample(samples,5))
-    pass
+    appoint = Appointment(
+        name = request.form.get("name"),
+        phone = request.form.get("phone"),
+        time = request.form.get("date"),
+        dr_id = request.form.get("dr_id"),
+        appoitmnt_id = appointment_id
+    )
+    db.session.add(appoint)
+    db.session.commit()
+    return f"Appointment success. Your appointent id is {appointment_id}"
 
 @app.route("/list")
 def servicelist():
-    jsonfile = open("../static/assets/data/categories_prof.json")
-    jsondata = json.load(jsonfile)
-    categories = jsondata["categories"]
-    serviceproviders = ServiceProvider.query.all()
-    return render_template("serviceproviderlist.html",providers = serviceproviders,categories = categories)
+    doctors = ServiceProvider.query.all()
+    return render_template("serviceproviderlist.html",doctors = doctors)
 
-@app.route("/profile/edit",methods = ["GET",'POST'])
-def ProfileEdit():
-    if 'user' not in session:
-        return abort(404)
-    user = ServiceProvider.query.filter_by(email = session['user']['email']).first()
-    if user.profession != "Doctor":
-        abort(404)
-    if request.method == "GET":
-        return render_template("editProfile.html",user = user)
-    if request.method == "POST":
-        user.name = request.form.get("name")
-        user.phone = request.form.get("phone")
-        user.address = request.form.get("address")
-        user.profession = request.form.get("profession")
-        user.category = request.form.get("category")
-        user.state = request.form.get("state")
-        user.city = request.form.get("city")
-        user.speciality = request.form.get("speciality")
-        user.experience = request.form.get("experience")
-        user.qualification = request.form.get("qualification")
-        db.session.commit()
-        flash("Profile Update")
-        return redirect(f"/profile/{user.email}")

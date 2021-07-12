@@ -211,7 +211,7 @@
                   </div>
                   <hr>
                   {%endif%}
-                  {% if curr_user %}
+                  {% if curr_user or curr_user.profession == "Doctor" %}
                   <div class="row">
                     <div class="col-sm-12">
                       <a class="btn btn-info " href="/profile/edit">Edit</a>

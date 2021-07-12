@@ -72,7 +72,7 @@
       }
     })
     .catch((error) => {
-      displayError(thisForm, error);
+      
     });
   }
 

@@ -57,5 +57,6 @@ class Appointment(maindb.Model):
     appoitmnt_id = maindb.Column(maindb.String(5),nullable = False)
     name = maindb.Column(maindb.String(50),nullable=False)
     phone = maindb.Column(maindb.String(13),nullable=False)
+    time = maindb.Column(maindb.DateTime,nullable = True)
     dr_id = maindb.Column(maindb.Integer,nullable=False)
 
