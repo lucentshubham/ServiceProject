@@ -1,3 +1,4 @@
+from flask.sessions import NullSession
 from flask_sqlalchemy import SQLAlchemy
 maindb = SQLAlchemy()
 class ServiceProvider(maindb.Model):
@@ -42,6 +43,7 @@ class User(maindb.Model):
     state=maindb.Column(maindb.String(30),nullable = True)
     phone = maindb.Column(maindb.String(13),nullable = True) 
     password=maindb.Column(maindb.String(16),nullable = False)
+    profile_pic=maindb.Column(maindb.String(50),nullable = True)
 
 class Admin(maindb.Model):
     __tablename__ = "admin"

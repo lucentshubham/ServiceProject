@@ -1,14 +1,14 @@
 from flask import Flask,render_template,request,session,abort
 from flask.helpers import flash
-from werkzeug.utils import redirect
+from werkzeug.utils import redirect, secure_filename
 import random
 import json
 from Database.databases import ServiceProvider,User,maindb as db 
-from Doctor.main import db as doctor_db,app as doctor_app
+from Doctor.main import db as doctor_db,app as doctor_app 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dfssdafasbsjcsdflhnvvbhflssdfhjsffrdees"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:kapil@localhost/service_provider_website"
-#app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost:3306/service_provider_website"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:kapil@localhost/service_provider_website"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:@localhost:3306/service_provider_website"
 db.__init__(app)
 app.register_blueprint(doctor_app,url_prefix="/doctor")
 doctor_db.__init__(app)
@@ -57,7 +57,7 @@ def signup():
             )
             db.session.add(user)
             db.session.commit()
-            print("add successfully")
+            flash("add successfully")
         return render_template("userlogin.html")
 
 @app.route("/logout")
@@ -68,7 +68,7 @@ def logout():
         pass
     return redirect("/")
 
-@app.route('/profile/<string:email>')
+@app.route('/profile/<string:email>',methods=["GET","POST"])
 def profile(email):
     user  = ServiceProvider.query.filter_by(email = email).first()
     if not user:
@@ -76,8 +76,18 @@ def profile(email):
     curr_user = None
     if 'user' in session:
         curr_user = session['user']
+    
     if user:
-        return render_template('profile.html',user = user,curr_user = curr_user)
+        if request.method == "GET":
+            return render_template('profile.html',user = user,curr_user = curr_user)
+        if request.method == "POST":
+            profile_pic = request.files["profile_pic"]
+            filename = secure_filename(profile_pic.filename)
+            profile_pic.save("/static/profile_images/"+filename)
+            user.profile_pic = "/static/profile_images/"+filename
+            db.session.commit()
+            flash("")
+            return redirect("/profile/"+user.email)
     return abort(404)
 
 

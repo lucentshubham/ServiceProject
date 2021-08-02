@@ -3,7 +3,7 @@ from Database.databases import Appointment, ServiceProvider
 from flask_sqlalchemy import SQLAlchemy
 import random,json
 from datetime import datetime
-app = Blueprint(__file__,"doctor_app",static_folder="static",template_folder="Doctor/templates")
+app = Blueprint("Doctor","doctor_app",static_folder="static",template_folder="Doctor/templates")
 db = SQLAlchemy()
 
 @app.route('/signup', methods=['GET','POST'])
