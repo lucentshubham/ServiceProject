@@ -77,6 +77,9 @@ def appointment():
 
 @app.route("/list")
 def servicelist():
+    user = None
+    if "user" in session:
+        user = session["user"]
     doctors = ServiceProvider.query.all()
-    return render_template("serviceproviderlist.html",doctors = doctors)
+    return render_template("serviceproviderlist.html",doctors = doctors,user = user)
 

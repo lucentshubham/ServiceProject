@@ -14,6 +14,7 @@ app.register_blueprint(doctor_app,url_prefix="/doctor")
 doctor_db.__init__(app)
 @app.route("/")
 def home():
+    
     user = None
     if "user" in session:
         user = session['user']
@@ -83,10 +84,10 @@ def profile(email):
         if request.method == "POST":
             profile_pic = request.files["profile_pic"]
             filename = secure_filename(profile_pic.filename)
-            profile_pic.save("/static/profile_images/"+filename)
+            profile_pic.save("./static/profile_images/"+filename)
             user.profile_pic = "/static/profile_images/"+filename
             db.session.commit()
-            flash("")
+            flash("Profile  update")
             return redirect("/profile/"+user.email)
     return abort(404)
 
