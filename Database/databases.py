@@ -6,7 +6,7 @@ class ServiceProvider(maindb.Model):
     sno = maindb.Column(maindb.Integer,primary_key = True)
     name = maindb.Column(maindb.String(50),nullable=False)
     email = maindb.Column(maindb.String(50),nullable = False)
-    password = maindb.Column(maindb.String(50),nullable = False)
+    password = maindb.Column(maindb.String(8),nullable = False)
     profession = maindb.Column(maindb.String(50),nullable = False)
     category = maindb.Column(maindb.String(50),nullable = False)
     city = maindb.Column(maindb.String(30),nullable = True)
@@ -61,4 +61,4 @@ class Appointment(maindb.Model):
     phone = maindb.Column(maindb.String(13),nullable=False)
     time = maindb.Column(maindb.DateTime,nullable = True)
     dr_id = maindb.Column(maindb.Integer,nullable=False)
-
+    

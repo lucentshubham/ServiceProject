@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 {% block mainbody %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  
+  {% for message in messages %}
+    <script>alert(`{{message}}`)</script>
+  {% endfor %}
+  
+{% endif %}
+{% endwith %}
   
   <main id="main">
   <link rel="stylesheet" href="{{url_for('static',filename = 'assets/css/serviceList.css')}}">
